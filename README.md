@@ -123,6 +123,18 @@ Para fazer uso dos diversos endereços DNS, vamos precisar instanciar o serviço
 5. Escolha o endereço do domínio e prossiga.
    ![img-23](./support/imgs/23.png)
 
+6. Para criar registros de subdomínios que apontam para os endereços que irá utilizar, acesse a aba Reliability.
+   ![img-24](./support/imgs/24.png)
+
+7. Entre na aba de DNS.
+   ![img-25](./support/imgs/25.png)
+
+8. Desça na página até **DNS Records** e clique em Adicionar.
+   ![img-26](./support/imgs/26.png)
+
+9. Defina as configuraçōes básicas, escolha o nome do subdomínio e informe seu IPv4.
+   ![img-27](./support/imgs/27.png)
+
 ### Acessando a VM
 
 É necessário criar o arquivo da credencial (cred.pem) dentro de uma pasta em sua máquina, após isso é preciso acessá-la através do terminal e utilizar o comando
