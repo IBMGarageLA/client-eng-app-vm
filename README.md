@@ -11,6 +11,74 @@
 
 ## Passo a Passo
 
+### Chave SSH na IBM Cloud
+
+Antes de mais nada para que seja possívle seguir corretamente esse tutorial é preciso criar uma chave ssh pois ela será utilizada para acessar a máquina virtual criada e realizar as operações necessárias para disponibilizar a aplicação. Existem muitos métodos e tutoriais de como criar uma chave sshm recomendamos fortemente o disponibilizado pelo [GitHub](https://docs.github.com/pt/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), siga somente os passos da seção "Gerar uma nova chave SSH", ao final desses passos você deve ter em seu diretório dois arquivos, uma chave pública e uma privada. A chave privada você deverá renomear para `cred.pem` pois este será o nome utilizada pelo tutorial.
+
+De posse das chaves acesse a IBM Cloud: https://cloud.ibm.com/
+
+1.  No painel inicial, clique no menu no canto superior esquerdo, selecione a opção VPC e depois SSH.
+    ![img-1](./support/imgs/1.png)
+
+2.  Com o painel de chaves aberto vamos carregar nossa nova chave, clique no botão "Create" do lado diretiro na tela.
+    ![img-2](./support/imgs/2.png)
+
+3.  Escolha a localização de armazenamento da chave, de um nome para a chave e cole a chave pública no espaço "Public Key", apos isso clique em "Create"
+    ![img-3](./support/imgs/3.png)
+
+4.  A chave deve aparecer no painel de chaves
+
+5.  Com chave criada e carregada agorá e preciso criar a rede privada onde a nossa aplicação irá rodar. Do lado esquerdo, clique em VPCs.
+    ![img-4](./support/imgs/4.png)
+
+6.  Do lado direito, clique no botão "Create" para criar uma nova VPC
+    ![img-5](./support/imgs/5.png)
+
+7.  Escolha onde ela será criada e de um nome a ela, em seguinda basta clicar no botão "Create virtual private cloud"
+    ![img-6](./support/imgs/6.png)
+
+8.  Uma vez com a rede criada, agora é necessário criar a máquina virtual para executar a aplicação. Do lado esquerdo, clique em "Virtual server instances"
+    ![img-7](./support/imgs/7.png)
+
+9.  Clique no botão "Create" do lado direto da tela.
+    ![img-8](./support/imgs/8.png)
+
+10. Configure a máqina de acordo com sua necessidade. Aqui o importante é associar a essa maquina a VPC criada no passo 7 e com a chave ssh do passo 1 para que tenhamos acesso. Selecione a o sitema operacional que melhor se adeque a suas necessidades, neste tutorial foi utilizado o Ubuntu.
+    ![img-9](./support/imgs/9.png)
+
+11. Com a máquina virtual criada, agora é necessário expor ela para que seja possível acessá-la. Para isso clique em "Floating IPs" do lado esquerdo.
+    ![img-10](./support/imgs/10.png)
+
+12. Vamos criar um IP para acessar a máquina. Clique em "Reserve" do lado direito da tela.
+    ![img-11](./support/imgs/11.png)
+
+13. Selecione a região, de um nome e selecione a vm crida para que o IP seja associado a ela. Em seguida clique em "Reserve".
+    ![img-12](./support/imgs/12.png)
+
+14. Agora com o IP alocado já é possivel acessar a VM via ssh. Guarde esse IP pois ele será utilizado para acessar sua VM
+
+15. Para que seja possivel disponibilizar sua aplicação na internet é preciso liberar a porta 80 e 443. Para isso acesse sua vm clicanco em "Virtual server intances" do lado esquerdo.
+    ![img-13](./support/imgs/13.png)
+
+16. Clique no nome da VM para acessar suas configurações.
+    ![img-14](./support/imgs/14.png)
+
+17. Na parte inferior da página, existe uma seção para configurar a interface de rede. Clique no grupo de segurança.
+    ![img-15](./support/imgs/15.png)
+
+18. Precisamos criar uma regra nova habilitar a exposição da vm a internet. Para isso clique em "Rules".
+    ![img-16](./support/imgs/16.png)
+
+19. Em Rules, clique no botão "Create" na seção "Inbound rules"
+    ![img-17](./support/imgs/17.png)
+
+20. Mantenha o protocolo como TCP, e adicione a porta 80. Em seguinda clique em "Create".
+    ![img-18](./support/imgs/18.png)
+
+21. Repita o passo 20 caso queria liberar a porta 443.
+
+Ao final dessa etapa voce dever ter em mãos a chave privada ssh e o IP de acesso da VM, com isso está pronto para serguir em frente.
+
 ### Acessando a VM
 
 É necessário criar o arquivo da credencial (cred.pem) dentro de uma pasta em sua máquina, após isso é preciso acessá-la através do terminal e utilizar o comando
@@ -725,8 +793,8 @@ http://<SeuIP>/companies
 
 ## Referências
 
-- [Criando Frontend público e Backend privado na IBM Cloud](https://cloud.ibm.com/docs/vpc?topic=solution-tutorials-vpc-public-app-private-backend)
-- ["Instalar Laravel no Ubunt"](https://www.hostinger.com/tutorials/how-to-install-laravel-on-ubuntu-18-04-with-apache-and-php/)
+- [Criação de Frontend publico e backend privado](https://cloud.ibm.com/docs/vpc?topic=solution-tutorials-vpc-public-app-private-backend)
+- ["Como Instalar Laravel no Ubunbtu"](https://www.hostinger.com/tutorials/how-to-install-laravel-on-ubuntu-18-04-with-apache-and-php/)
 - [CRUD no Laravel](https://techvblogs.com/blog/laravel-9-crud-application-tutorial-with-example)
 
 ## Licença
