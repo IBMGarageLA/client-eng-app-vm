@@ -1,4 +1,4 @@
-[![License: CC BY 4.0](https://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
+[![License: CC BY 4.0](https://i.creativecommons.org/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
 
 <p align="center">
   <h3 align="center">Linux Laravel</h3>
@@ -10,6 +10,8 @@
 </p>
 
 ## Introdução
+
+Este documento visa fornecer uma guia sobre como configurar um ambiente IaaS na IBM Cloud de forma a configurar uma Máquina Virtual e configurar uma aplicação laravel e expô-la na internet.
 
 ## Passo a Passo
 
@@ -798,6 +800,11 @@ http://<SeuIP>/companies
 - [Criação de Frontend publico e backend privado](https://cloud.ibm.com/docs/vpc?topic=solution-tutorials-vpc-public-app-private-backend)
 - ["Como Instalar Laravel no Ubunbtu"](https://www.hostinger.com/tutorials/how-to-install-laravel-on-ubuntu-18-04-with-apache-and-php/)
 - [CRUD no Laravel](https://techvblogs.com/blog/laravel-9-crud-application-tutorial-with-example)
+
+## Autores
+
+- Gabriel Felisberto Pires
+- João Pedro Poloni Ponce
 
 ## Licença
 
