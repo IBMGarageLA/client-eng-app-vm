@@ -83,6 +83,27 @@ De posse das chaves acesse a IBM Cloud: https://cloud.ibm.com/
 
 Ao final dessa etapa voce dever ter em mãos a chave privada ssh e o IP de acesso da VM, com isso está pronto para serguir em frente.
 
+## Acesso externo ao Banco de Dados
+
+A IBM Cloud oferece alguns bancos de dados em sua nuvem, um deles é o [MySQL](https://cloud.ibm.com/databases/databases-for-mysql/create). Nele é possível customizar algumas features para de acordo com a necessidade. Com o produto instanciado é será possivel acessá-lo atraves do seu link, com as credenciais de usuário e a porta correta fornecida na aba de credenciais do produto.
+
+1. Para liberar a conexão com o Bando de Dados externo é necessário criar uma regra no grupo de segurança que permirta isso. Na sua VPC acesso o grupo de segurança o qual pertence sua máquina.
+   ![img-001](./support/imgs/15.png)
+
+2. Precisamos criar uma regra que habilite o acesso externo, clique em "Rules".
+   ![img-002](./support/imgs/16.png)
+
+3. Aqui vamos precisar criar uma regra para inbound, clique no botão "Create" na seção "Inbound rules"
+   ![img-003](./support/imgs/17.png)
+
+4. Tambem é necessário criar uma regra de outbound, clique no botão "Create" na seção "Outbound rules"
+   ![img-004](./support/imgs/001.png)
+
+5. Selcione o protocolo e estabelece a porta que deve ser exposta.
+   ![img-005](./support/imgs/002.png)
+
+Dessa será possivel habilitar o acesso externo da VM ao banco de dafos na nuvem.
+
 ### DNS na IBM Cloud
 
 Para fazer uso dos diversos endereços DNS, vamos precisar instanciar o serviço **Internet Services** na IBM Cloud, então acesse sua conta em https://cloud.ibm.com/ e siga os passos abaixo:
@@ -194,23 +215,23 @@ chmod +x /usr/local/bin/composer
 
 Agora iremos criar o projeto, vamos executar uma série de comandos
 
--   Para criar o projeto
+- Para criar o projeto
 
-    ```
-    composer create-project --prefer-dist laravel/laravel <NomeDoProjeto>
-    ```
+  ```
+  composer create-project --prefer-dist laravel/laravel <NomeDoProjeto>
+  ```
 
--   Para acessar o diretório do projeto
+- Para acessar o diretório do projeto
 
-    ```
-    cd <NomeDoProjeto>
-    ```
+  ```
+  cd <NomeDoProjeto>
+  ```
 
--   Para configurar o ambiente
+- Para configurar o ambiente
 
-    ```
-    serve --host=<SeuIP> --port=<PortaDesejada>
-    ```
+  ```
+  serve --host=<SeuIP> --port=<PortaDesejada>
+  ```
 
 Para rodar o projeto precisamos move-lo para a pasta raiz do Apache com o comando
 
@@ -514,293 +535,293 @@ DB_PASSWORD=<SenhaDoUsuario>
 
 Agora, iremos criar as telas para acessar através dessa rota, primeiro acesse o diretório **resources/views** e crie uma nova pasta chamada **companies**, dentro delas vamos precisar de 3 telas:
 
--   index.blade.php
+- index.blade.php
 
-    ```
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
+  ```
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
 
-        <meta charset="UTF-8">
+      <meta charset="UTF-8">
 
-        <title>Laravel 9 CRUD Tutorial Example</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
+      <title>Laravel 9 CRUD Tutorial Example</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
 
-      </head>
-      <body>
-        <div class="container mt-2">
+    </head>
+    <body>
+      <div class="container mt-2">
+        <div class="row">
+            <div class="col-lg-12 margin-tb">
+                <div class="pull-left">
+
+                    <h2>Laravel 9 CRUD Example Tutorial</h2>
+
+                </div>
+                <div class="pull-right mb-2">
+
+                    <a class="btn btn-success" href="{{ route('companies.create') }}"> Create Company</a>
+
+                </div>
+              </div>
+        </div>
+
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+
+                    <th>Company Name</th>
+
+                    <th>Company Email</th>
+
+                    <th>Company Address</th>
+
+                    <th width="280px">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($companies as $company)
+                    <tr>
+                        <td>{{ $company->id }}</td>
+
+                        <td>{{ $company->name }}</td>
+
+                        <td>{{ $company->email }}</td>
+
+                        <td>{{ $company->address }}</td>
+
+                        <td>
+                            <form action="{{ route('companies.destroy',$company->id) }}" method="Post">
+
+                                <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">Edit</a>
+
+                                @csrf
+
+                                @method('DELETE')
+
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+            </tbody>
+        </table>
+
+        {!! $companies->links() !!}
+
+      </div>
+    </body>
+  </html>
+  ```
+
+- create.blade.php
+
+  ```
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+
+      <meta charset="UTF-8">
+      <title>Add Company Form - Laravel 9 CRUD</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    </head>
+    <body>
+      <div class="container mt-2">
+          <div class="row">
+              <div class="col-lg-12 margin-tb">
+                  <div class="pull-left mb-2">
+
+                      <h2>Add Company</h2>
+
+                  </div>
+                  <div class="pull-right">
+
+                      <a class="btn btn-primary" href="{{ route('companies.index') }}"> Back</a>
+
+                  </div>
+              </div>
+          </div>
+
+          @if(session('status'))
+
+            <div class="alert alert-success mb-1 mt-1">
+
+                {{ session('status') }}
+
+            </div>
+
+          @endif
+
+          <form action="{{ route('companies.store') }}" method="POST" enctype="multipart/form-data">
+              @csrf
+              <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
+
+                          <strong>Company Name:</strong>
+
+                          <input type="text" name="name" class="form-control" placeholder="Company Name">
+
+                          @error('name')
+
+                          <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+
+                          @enderror
+
+                      </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
+
+                          <strong>Company Email:</strong>
+
+                          <input type="email" name="email" class="form-control" placeholder="Company Email">
+
+                          @error('email')
+
+                          <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+
+                          @enderror
+
+                      </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
+
+                          <strong>Company Address:</strong>
+
+                          <input type="text" name="address" class="form-control" placeholder="Company Address">
+
+                          @error('address')
+
+                          <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+
+                          @enderror
+                      </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary ml-3">Submit</button>
+
+              </div>
+          </form>
+      </div>
+   </body>
+  </html>
+  ```
+
+- edit.blade.php
+
+  ```
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+
+      <meta charset="UTF-8">
+      <title>Edit Company Form - Laravel 9 CRUD Tutorial</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    </head>
+    <body>
+      <div class="container mt-2">
           <div class="row">
               <div class="col-lg-12 margin-tb">
                   <div class="pull-left">
 
-                      <h2>Laravel 9 CRUD Example Tutorial</h2>
+                      <h2>Edit Company</h2>
 
                   </div>
-                  <div class="pull-right mb-2">
+                  <div class="pull-right">
 
-                      <a class="btn btn-success" href="{{ route('companies.create') }}"> Create Company</a>
+                      <a class="btn btn-primary" href="{{ route('companies.index') }}" enctype="multipart/form-data">
+
+                          Back</a>
 
                   </div>
-                </div>
+              </div>
           </div>
 
-          @if ($message = Session::get('success'))
-              <div class="alert alert-success">
-                  <p>{{ $message }}</p>
-              </div>
+          @if(session('status'))
+
+            <div class="alert alert-success mb-1 mt-1">
+
+                {{ session('status') }}
+
+            </div>
+
           @endif
 
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>S.No</th>
+          <form action="{{ route('companies.update',$company->id) }}" method="POST" enctype="multipart/form-data">
+              @csrf
+              @method('PUT')
 
-                      <th>Company Name</th>
+              <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
 
-                      <th>Company Email</th>
+                          <strong>Company Name:</strong>
 
-                      <th>Company Address</th>
+                          <input type="text" name="name" value="{{ $company->name }}" class="form-control"
 
-                      <th width="280px">Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach ($companies as $company)
-                      <tr>
-                          <td>{{ $company->id }}</td>
+                              placeholder="Company name">
 
-                          <td>{{ $company->name }}</td>
+                          @error('name')
 
-                          <td>{{ $company->email }}</td>
+                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
 
-                          <td>{{ $company->address }}</td>
+                          @enderror
 
-                          <td>
-                              <form action="{{ route('companies.destroy',$company->id) }}" method="Post">
+                      </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
 
-                                  <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">Edit</a>
+                          <strong>Company Email:</strong>
 
-                                  @csrf
+                          <input type="email" name="email" class="form-control" placeholder="Company Email"
 
-                                  @method('DELETE')
+                              value="{{ $company->email }}">
 
-                                  <button type="submit" class="btn btn-danger">Delete</button>
-                              </form>
-                          </td>
-                      </tr>
-                      @endforeach
-              </tbody>
-          </table>
+                          @error('email')
 
-          {!! $companies->links() !!}
+                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
 
-        </div>
-      </body>
-    </html>
-    ```
+                          @enderror
 
--   create.blade.php
+                      </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                      <div class="form-group">
 
-    ```
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
+                          <strong>Company Address:</strong>
 
-        <meta charset="UTF-8">
-        <title>Add Company Form - Laravel 9 CRUD</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                          <input type="text" name="address" value="{{ $company->address }}" class="form-control"
 
-      </head>
-      <body>
-        <div class="container mt-2">
-            <div class="row">
-                <div class="col-lg-12 margin-tb">
-                    <div class="pull-left mb-2">
+                              placeholder="Company Address">
 
-                        <h2>Add Company</h2>
+                          @error('address')
 
-                    </div>
-                    <div class="pull-right">
+                          <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
 
-                        <a class="btn btn-primary" href="{{ route('companies.index') }}"> Back</a>
+                          @enderror
 
-                    </div>
-                </div>
-            </div>
+                      </div>
+                  </div>
 
-            @if(session('status'))
-
-              <div class="alert alert-success mb-1 mt-1">
-
-                  {{ session('status') }}
+                  <button type="submit" class="btn btn-primary ml-3">Submit</button>
 
               </div>
-
-            @endif
-
-            <form action="{{ route('companies.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Name:</strong>
-
-                            <input type="text" name="name" class="form-control" placeholder="Company Name">
-
-                            @error('name')
-
-                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Email:</strong>
-
-                            <input type="email" name="email" class="form-control" placeholder="Company Email">
-
-                            @error('email')
-
-                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Address:</strong>
-
-                            <input type="text" name="address" class="form-control" placeholder="Company Address">
-
-                            @error('address')
-
-                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary ml-3">Submit</button>
-
-                </div>
-            </form>
-        </div>
-     </body>
-    </html>
-    ```
-
--   edit.blade.php
-
-    ```
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-
-        <meta charset="UTF-8">
-        <title>Edit Company Form - Laravel 9 CRUD Tutorial</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-      </head>
-      <body>
-        <div class="container mt-2">
-            <div class="row">
-                <div class="col-lg-12 margin-tb">
-                    <div class="pull-left">
-
-                        <h2>Edit Company</h2>
-
-                    </div>
-                    <div class="pull-right">
-
-                        <a class="btn btn-primary" href="{{ route('companies.index') }}" enctype="multipart/form-data">
-
-                            Back</a>
-
-                    </div>
-                </div>
-            </div>
-
-            @if(session('status'))
-
-              <div class="alert alert-success mb-1 mt-1">
-
-                  {{ session('status') }}
-
-              </div>
-
-            @endif
-
-            <form action="{{ route('companies.update',$company->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Name:</strong>
-
-                            <input type="text" name="name" value="{{ $company->name }}" class="form-control"
-
-                                placeholder="Company name">
-
-                            @error('name')
-
-                              <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Email:</strong>
-
-                            <input type="email" name="email" class="form-control" placeholder="Company Email"
-
-                                value="{{ $company->email }}">
-
-                            @error('email')
-
-                              <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-
-                            <strong>Company Address:</strong>
-
-                            <input type="text" name="address" value="{{ $company->address }}" class="form-control"
-
-                                placeholder="Company Address">
-
-                            @error('address')
-
-                            <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-
-                            @enderror
-
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary ml-3">Submit</button>
-
-                </div>
-            </form>
-        </div>
-      </body>
-    </html>
-    ```
+          </form>
+      </div>
+    </body>
+  </html>
+  ```
 
 Finalmente, para executar seu projeto, utilize o comando
 
@@ -816,14 +837,14 @@ http://<SeuIP>/companies
 
 ## Referências
 
--   [Criação de Frontend publico e backend privado](https://cloud.ibm.com/docs/vpc?topic=solution-tutorials-vpc-public-app-private-backend)
--   ["Como Instalar Laravel no Ubunbtu"](https://www.hostinger.com/tutorials/how-to-install-laravel-on-ubuntu-18-04-with-apache-and-php/)
--   [CRUD no Laravel](https://techvblogs.com/blog/laravel-9-crud-application-tutorial-with-example)
+- [Criação de Frontend publico e backend privado](https://cloud.ibm.com/docs/vpc?topic=solution-tutorials-vpc-public-app-private-backend)
+- ["Como Instalar Laravel no Ubunbtu"](https://www.hostinger.com/tutorials/how-to-install-laravel-on-ubuntu-18-04-with-apache-and-php/)
+- [CRUD no Laravel](https://techvblogs.com/blog/laravel-9-crud-application-tutorial-with-example)
 
 ## Autores
 
--   Gabriel Felisberto Pires
--   João Pedro Poloni Ponce
+- Gabriel Felisberto Pires
+- João Pedro Poloni Ponce
 
 ## Licença
 
