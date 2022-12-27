@@ -9,6 +9,22 @@
   </p>
 </p>
 
+- [Introdução](#introdução)
+- [Passo a Passo](#passo-a-passo)
+  - [Chave SSH na IBM Cloud](#chave-ssh-na-ibm-cloud)
+  - [Acesso externo ao Banco de Dados](#acesso-externo-ao-banco-de-dados)
+  - [DNS na IBM Cloud](#dns-na-ibm-cloud)
+  - [Acessando a VM](#acessando-a-vm)
+  - [Instalando o Apache](#instalando-o-apache)
+  - [Instalando o PHP](#instalando-o-php)
+  - [Configurando o ambiente](#configurando-o-ambiente)
+  - [Criando o projeto](#criando-o-projeto)
+  - [.env](#env)
+  - [Criando as telas](#criando-as-telas)
+- [Referências](#referências)
+- [Autores](#autores)
+- [Licença](#licença)
+
 ## Introdução
 
 Este documento visa fornecer uma guia sobre como configurar um ambiente IaaS na IBM Cloud de forma a configurar uma Máquina Virtual e configurar uma aplicação laravel e expô-la na internet.
@@ -83,7 +99,7 @@ De posse das chaves acesse a IBM Cloud: https://cloud.ibm.com/
 
 Ao final dessa etapa voce dever ter em mãos a chave privada ssh e o IP de acesso da VM, com isso está pronto para serguir em frente.
 
-## Acesso externo ao Banco de Dados
+### Acesso externo ao Banco de Dados
 
 A IBM Cloud oferece alguns bancos de dados em sua nuvem, um deles é o [MySQL](https://cloud.ibm.com/databases/databases-for-mysql/create). Nele é possível customizar algumas features para de acordo com a necessidade. Com o produto instanciado é será possivel acessá-lo atraves do seu link, com as credenciais de usuário e a porta correta fornecida na aba de credenciais do produto.
 
