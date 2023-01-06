@@ -13,8 +13,10 @@
 - [Passo a Passo](#passo-a-passo)
   - [Chave SSH na IBM Cloud](#chave-ssh-na-ibm-cloud)
   - [Acesso externo ao Banco de Dados](#acesso-externo-ao-banco-de-dados)
+  - [Credenciais do Banco de Dados](#)
   - [DNS na IBM Cloud](#dns-na-ibm-cloud)
   - [Acessando a VM](#acessando-a-vm)
+  - [Credenciais do Banco de Dados](#credenciais-do-banco-de-dados)
   - [Instalando o Apache](#instalando-o-apache)
   - [Instalando o PHP](#instalando-o-php)
   - [Configurando o ambiente](#configurando-o-ambiente)
@@ -119,6 +121,24 @@ A IBM Cloud oferece alguns bancos de dados em sua nuvem, um deles é o [MySQL](h
    ![img-005](./support/imgs/002.png)
 
 Dessa será possivel habilitar o acesso externo da VM ao banco de dafos na nuvem.
+
+### Credenciais do Banco de Dados
+
+Neste passo a passo será demonstrado como adquirir as credencias de um banco de dados na IBM Cloud do tipo "Databases for Redis" porém os passos são válidos para qualquer banco da mesma ofertas como por exemplo: "Databases for MySQL", "Databases for PosgreSQL", etc.
+
+1. Na sua lista de recursos expanda o painel de "Databses" e clique no seu banco.
+   ![img-db-001](./support/imgs/img-db-001.png)
+
+2. Assim que carregar, será possível visualizar algumas informações importantes como o link de conexão, certificado TLS. Nesta página salve apenas o certificado TLS pois ele será necessário para a conexão. Apesar de a primeira página já conter informações importantes, dados como usuario e senha não se encontram nessa página. Para ter acesso a elas, clique do lado esquerdo em "Service credentials".
+   ![img-db-002](./support/imgs/img-db-002.png)
+
+3. No lado direito clique em "New credential" para criar uma nova credencial.
+   ![img-db-003](./support/imgs/img-db-003.png)
+
+4. De um nome a sua nova credencial e clique em "Add".
+
+5. Expanda a nova crendecial, aqui estão todas as credneciais necessárias para conectar.
+   ![img-db-004](./support/imgs/img-db-004.png)
 
 ### DNS na IBM Cloud
 
